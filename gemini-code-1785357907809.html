@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRIS RAMOS — BCN MUA & FX</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            cursor: none;
+        }
+
+        body, html {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #000000;
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+            color: #ffffff;
+        }
+
+        /* Custom Motion Cursor */
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 18px;
+            height: 18px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            pointer-events: none;
+            mix-blend-mode: difference;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.15s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 60px;
+            height: 60px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.35s cubic-bezier(0.1, 1, 0.1, 1);
+        }
+
+        /* Full-Bleed High-Res Hero Background */
+        .hero-container {
+            position: absolute;
+            top: -5%;
+            left: -5%;
+            width: 110%;
+            height: 110%;
+            /* Direct link to your raw GitHub image */
+            background-image: url('https://raw.githubusercontent.com/parlakons/iris-web/main/IMG13_ELCREADOR.jpg');
+            background-size: cover;
+            background-position: center 35%;
+            background-repeat: no-repeat;
+            image-rendering: -webkit-optimize-contrast;
+            filter: contrast(1.04) brightness(0.92);
+            will-change: transform;
+            transition: transform 0.1s ease-out;
+            z-index: 1;
+        }
+
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, transparent 35%, rgba(0,0,0,0.5) 100%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Editorial Layout Grid */
+        .editorial-ui {
+            position: relative;
+            z-index: 3;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 3rem 3.5rem;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .kinetic-title {
+            font-size: clamp(3.5rem, 8vw, 10rem);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+            line-height: 0.8;
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            transition: transform 0.3s ease, letter-spacing 0.3s ease;
+        }
+
+        .kinetic-title:hover {
+            transform: skewX(-3deg) scale(1.02);
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 700;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: #fff;
+            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .bottom-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .artist-details {
+            max-width: 380px;
+            font-size: 0.75rem;
+            line-height: 1.6;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: rgba(255, 255, 255, 0.85);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+
+        .artist-details strong {
+            color: #ffffff;
+            font-size: 0.85rem;
+            display: block;
+            margin-bottom: 0.3rem;
+            letter-spacing: 0.12em;
+        }
+
+        .contact-box {
+            text-align: right;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .phone-link {
+            display: inline-block;
+            margin-top: 0.4rem;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #ffffff;
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .phone-link:hover {
+            transform: translateY(-2px);
+            color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Custom Pointer -->
+    <div class="custom-cursor" id="cursor"></div>
+    <div class="cursor-trail" id="trail"></div>
+
+    <!-- Background Layer -->
+    <div class="hero-container" id="hero"></div>
+    <div class="overlay"></div>
+
+    <!-- Editorial UI Overlay -->
+    <main class="editorial-ui">
+        <header class="top-bar">
+            <div>
+                <h1 class="kinetic-title interactive">IRIS RAMOS</h1>
+            </div>
+            <nav class="nav-links">
+                <a href="#work" class="interactive">WORK</a>
+                <a href="#concept" class="interactive">CONCEPT</a>
+                <a href="#contact" class="interactive">CONTACT</a>
+            </nav>
+        </header>
+
+        <footer class="bottom-bar">
+            <div class="artist-details">
+                <strong>BCN MUA & FX</strong>
+                <p>SPECIAL EFFECTS, CONCEPTUAL ART, FASHION & EDITORIAL MAKEUP</p>
+                <p style="margin-top: 0.4rem; opacity: 0.6;">BARCELONA / WORLDWIDE</p>
+            </div>
+
+            <div class="contact-box">
+                <span style="opacity: 0.7; font-size: 0.75rem;">BOOKINGS & INQUIRIES</span><br>
+                <a href="tel:+34615940561" class="phone-link interactive">+34 615 94 05 61</a>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        const hero = document.getElementById('hero');
+        const cursor = document.getElementById('cursor');
+        const trail = document.getElementById('trail');
+
+        let mouseX = 0, mouseY = 0;
+        let trailX = 0, trailY = 0;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            cursor.style.left = `${mouseX}px`;
+            cursor.style.top = `${mouseY}px`;
+
+            const moveX = (mouseX / window.innerWidth - 0.5) * -25;
+            const moveY = (mouseY / window.innerHeight - 0.5) * -25;
+            hero.style.transform = `translate3d(${moveX}px, ${moveY}px, 0) scale(1.05)`;
+        });
+
+        function animateTrail() {
+            trailX += (mouseX - trailX) * 0.15;
+            trailY += (mouseY - trailY) * 0.15;
+
+            trail.style.left = `${trailX}px`;
+            trail.style.top = `${trailY}px`;
+
+            requestAnimationFrame(animateTrail);
+        }
+        animateTrail();
+
+        const interactives = document.querySelectorAll('.interactive');
+        interactives.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(2.5)';
+                trail.style.transform = 'translate(-50%, -50%) scale(1.4)';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                trail.style.transform = 'translate(-50%, -50%) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
